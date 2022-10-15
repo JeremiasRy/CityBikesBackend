@@ -5,7 +5,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<ISqlAccess, SqlAccess>();
 builder.Services.AddSingleton<IJourneyData, JourneyData>();
-
+builder.Services.AddSingleton<IStationData, StationData>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
