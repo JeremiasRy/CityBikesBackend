@@ -31,7 +31,7 @@ public class JourneyData : IJourneyData
         int pageSize)
     {
 
-        return await _dbAccess.LoadData<JourneyModel, dynamic>("[dbo].[GetJourneys]", new { date, duration, durationOperator, distanceOperator, distance, departureStationId, returnStationId, orderBy, orderDirection, pageIndex, pageSize});
+        return await _dbAccess.LoadData<JourneyModel, dynamic>("[dbo].[Sp_GetJourneys]", new { date, duration, durationOperator, distanceOperator, distance, departureStationId, returnStationId, orderBy, orderDirection, pageIndex, pageSize});
     }
 
 }
