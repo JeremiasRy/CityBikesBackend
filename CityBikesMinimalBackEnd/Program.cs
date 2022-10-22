@@ -32,3 +32,6 @@ app.UseCors();
 app.ConfigureApi();
 
 app.Run();
+
+// For testing.
+public partial class Program { }

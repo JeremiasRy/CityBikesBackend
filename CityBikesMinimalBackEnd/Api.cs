@@ -4,7 +4,6 @@ namespace CityBikesMinimalBackEnd;
 
 public static class Api
 {
-    static readonly LoggerFactory _loggerFactory = new();
     public static void ConfigureApi(this WebApplication app) 
     { 
         app.MapGet("/journeys", GetJourneys);
@@ -14,7 +13,7 @@ public static class Api
         app.MapGet("/station/stats/departures", GetStationTop5Departures);
     }
 
-    static async Task<IResult> GetJourneys(IJourneyData data, string? date, string? durationOperator, string? distanceOperator, int? duration, int? distance, string? departureStationId, string? returnStationId, string? orderBy, string? orderDirection, int pageIndex = 1, int pageSize = 50)
+    public static async Task<IResult> GetJourneys(IJourneyData data, string? date, string? durationOperator, string? distanceOperator, int? duration, int? distance, string? departureStationId, string? returnStationId, string? orderBy, string? orderDirection, int pageIndex = 1, int pageSize = 50)
     {
         try
         {
