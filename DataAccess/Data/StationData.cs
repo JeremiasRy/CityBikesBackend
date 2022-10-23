@@ -17,9 +17,9 @@ public class StationData : IStationData
         return _DbAccess.LoadData<StationModel, dynamic>("[dbo].[Sp_GetStations]", new { });
     }
 
-    public Task<IEnumerable<StationStatisticModel>> GetStationStatistics(string stationId)
+    public Task<IEnumerable<StationStatisticModel>> GetStationStatistics(string stationId, int? month)
     {
-        return _DbAccess.LoadData<StationStatisticModel, dynamic>("[dbo].[Sp_GetStationStatistics]", new { stationId });
+        return _DbAccess.LoadData<StationStatisticModel, dynamic>("[dbo].[Sp_GetStationStatistics]", new { stationId, month });
     }
 
     public Task<IEnumerable<StationTop5Model>> GetStationTop5Returns(string stationId)
@@ -29,5 +29,14 @@ public class StationData : IStationData
     public Task<IEnumerable<StationTop5Model>> GetStationTop5Departures(string stationId)
     {
         return _DbAccess.LoadData<StationTop5Model, dynamic>("[dbo].[Sp_Top5DepToRtn]", new { stationId });
+    }
+
+    public async Task InserStation(StationModel newStation)
+    {
+        await _DbAccess.SaveData("[dbo].[Sp_InsertStation]", new { newStation.StationId, newStation.Name, newStation.Address, newStation.City, newStation.Operator, newStation.Capacity, newStation.Latitude, newStation.Altitude });
+    }
+    public async Task UpdateStation(StationModel newStation)
+    {
+        await _DbAccess.SaveData("[dbo].[Sp_UpdateStation]", new { newStation.StationId, newStation.Name, newStation.Address, newStation.City, newStation.Operator, newStation.Capacity, newStation.Latitude, newStation.Altitude });
     }
 }

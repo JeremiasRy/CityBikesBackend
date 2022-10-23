@@ -11,19 +11,35 @@ public static class Api
         app.MapGet("/station/stats", GetStationStatistics);
         app.MapGet("/station/stats/returns", GetStationTop5Returns);
         app.MapGet("/station/stats/departures", GetStationTop5Departures);
+        app.MapPost("/stations", PostStation);
+        app.MapPut("/stations", UpdateStation);
+        app.MapPost("/journeys", PostJourney);
     }
 
-    public static async Task<IResult> GetJourneys(IJourneyData data, string? date, string? durationOperator, string? distanceOperator, int? duration, int? distance, string? departureStationId, string? returnStationId, string? orderBy, string? orderDirection, int pageIndex = 1, int pageSize = 50)
+    public static async Task<IResult> GetJourneys(IJourneyData data, int? month, string? durationOperator, string? distanceOperator, int? duration, int? distance, string? departureStationId, string? returnStationId, string? orderBy, string? orderDirection, int pageIndex = 1, int pageSize = 50)
     {
         try
         {
-            return Results.Ok(await data.GetJourneys(date, durationOperator, distanceOperator, duration, distance, departureStationId, returnStationId, orderBy, orderDirection, pageIndex, pageSize));
+            return Results.Ok(await data.GetJourneys(month, durationOperator, distanceOperator, duration, distance, departureStationId, returnStationId, orderBy, orderDirection, pageIndex, pageSize));
 
         } catch (Exception ex)
         {
             return Results.Problem(ex.Message);
         }
-        
+    }
+
+    static async Task<IResult> PostJourney(IJourneyData data, JourneyModel newJourney)
+    {
+        try
+        {
+            await data.InsertJourney(newJourney);
+            return Results.Ok();
+        }
+        catch (Exception ex)
+        {
+            return Results.Problem(ex.Message);
+        }
+
     }
 
     static async Task<IResult> GetStations(IStationData data)
@@ -37,11 +53,11 @@ public static class Api
         }
     }
 
-    static async Task<IResult> GetStationStatistics(IStationData data, string stationId)
+    static async Task<IResult> GetStationStatistics(IStationData data, string stationId, int? month)
     {
         try
         {
-            return Results.Ok(await data.GetStationStatistics(stationId));
+            return Results.Ok(await data.GetStationStatistics(stationId, month));
         } catch (Exception ex)
         {
             return Results.Problem(ex.Message);
@@ -70,4 +86,32 @@ public static class Api
             return Results.Problem(ex.Message);
         }
     } 
+
+    static async Task<IResult> PostStation(IStationData data, StationModel newStation)
+    {
+        try
+        {
+            await data.InserStation(newStation);
+            return Results.Ok();
+        } catch(Exception ex)
+        {
+            return Results.Problem(ex.Message);
+        }
+    }
+    static async Task<IResult> UpdateStation(IStationData data, StationModel newStation)
+    {
+        var stations = await data.GetStations();
+        if (!stations.Any(station => station.StationId == newStation.StationId))
+            return Results.BadRequest(new Error("Not found error", $"Didn't find station with id {newStation.StationId}"));
+
+        try
+        {
+            await data.UpdateStation(newStation);
+            return Results.Ok();
+        }
+        catch (Exception ex)
+        {
+            return Results.Problem(ex.Message);
+        }
+    }
 }

@@ -18,7 +18,7 @@ public class JourneyData : IJourneyData
     }
 
     public async Task<IEnumerable<JourneyModel>> GetJourneys(
-        string? date,
+        int? month,
         string? durationOperator,
         string? distanceOperator,
         int? duration,
@@ -31,7 +31,13 @@ public class JourneyData : IJourneyData
         int pageSize)
     {
 
-        return await _dbAccess.LoadData<JourneyModel, dynamic>("[dbo].[Sp_GetJourneys]", new { date, duration, durationOperator, distanceOperator, distance, departureStationId, returnStationId, orderBy, orderDirection, pageIndex, pageSize});
+        return await _dbAccess.LoadData<JourneyModel, dynamic>("[dbo].[Sp_GetJourneys]", new { month, duration, durationOperator, distanceOperator, distance, departureStationId, returnStationId, orderBy, orderDirection, pageIndex, pageSize });
+    }
+
+    public async Task InsertJourney(JourneyModel newJourney)
+    {
+        string date = newJourney.DepartureDate.ToString("yyyy-MM-dd");
+        await _dbAccess.SaveData("[dbo].[Sp_InsertJourney]", new { date, newJourney.DepartureStationId, newJourney.ReturnStationId, newJourney.Distance, newJourney.Duration });
     }
 
 }

@@ -12,6 +12,6 @@ public class JourneyModel
     public DateTime DepartureDate { get; set; }
     public string? DepartureStationId { get; set; }
     public string? ReturnStationId { get; set; }
-    public int Distance { get; set; }
-    public int Duration { get; set; }
+    public int? Distance { get; set; }
+    public int? Duration { get; set; }
 }

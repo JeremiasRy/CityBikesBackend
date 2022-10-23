@@ -13,8 +13,8 @@ public class StationModel
     public string? Address { get; set; }
     public string? City { get; set; }
     public string? Operator { get; set; }
-    public int Capacity { get; set; }
-    public float Latitude { get; set; }
-    public float Altitude { get; set; }
+    public int? Capacity { get; set; }
+    public float? Latitude { get; set; }
+    public float? Altitude { get; set; }
 
 }
