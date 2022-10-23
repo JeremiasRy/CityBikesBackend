@@ -13,7 +13,7 @@ public class SqlAccess : ISqlAccess
         _config = config;
     }
 
-    public async Task<IEnumerable<T>> LoadData<T, U>(string storedProcedure, U parameters, string connectionString = "Default")
+    public async Task<IEnumerable<T>> LoadData<T, U>(string storedProcedure, U parameters, string connectionString = "Default") 
     {
         using (IDbConnection connection = new SqlConnection(_config.GetConnectionString(connectionString)))
         {
