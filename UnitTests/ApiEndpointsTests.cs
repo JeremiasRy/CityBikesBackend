@@ -48,7 +48,7 @@ public class EndPoints
     }
 
     [TestMethod]
-    public async Task InsertJourney()
+    public async Task TestInsertJourneyDelte()
     {
         using var app = new CityBikeApp();
         var client = app.CreateClient();
@@ -76,15 +76,39 @@ public class EndPoints
             Assert.AreEqual(resultJourney.DepartureStationId, newJourney.DepartureStationId);
             Assert.AreEqual(resultJourney.ReturnStationId, newJourney.ReturnStationId);
             Assert.AreEqual(date.Date, resultJourney.DepartureDate);
+            await client.DeleteAsync($"/journeys?id={resultJourney.Id}");
+        }
+    }
+
+        [TestMethod]
+        public async Task TestInsertStationAndDelete()
+        {
+            using var app = new CityBikeApp();
+            var client = app.CreateClient();
+
+            StationModel newStation = new()
+            {
+                StationId = "999",
+                Name = "Test Station"
+            };
+
+            var result = await client.PostAsJsonAsync("/stations", newStation);
+            Assert.IsTrue(result.IsSuccessStatusCode);
+
+            var checkDbResult = await client.GetFromJsonAsync<IEnumerable<StationModel>>("/stations");
+            if (checkDbResult != null)
+            {
+                var resultStation = checkDbResult.Where(station => station.StationId == newStation.StationId).FirstOrDefault();
+                if (resultStation != null)
+                {
+                Assert.AreEqual(resultStation.StationId, newStation.StationId);
+                Assert.AreEqual("Test Station", newStation.Name);
+                }
+            }
+        await client.DeleteAsync($"/stations?stationId={newStation.StationId}");
+
         }
 
-
-
-
-
-
-
-    }
 }
 
 class CityBikeApp : WebApplicationFactory<Program>

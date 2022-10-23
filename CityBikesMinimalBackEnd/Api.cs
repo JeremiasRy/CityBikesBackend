@@ -14,6 +14,8 @@ public static class Api
         app.MapPost("/stations", PostStation);
         app.MapPut("/stations", UpdateStation);
         app.MapPost("/journeys", PostJourney);
+        app.MapDelete("/journeys", DeleteJourney);
+        app.MapDelete("/stations", DeleteStation);
     }
 
     public static async Task<IResult> GetJourneys(IJourneyData data, int? month, string? durationOperator, string? distanceOperator, int? duration, int? distance, string? departureStationId, string? returnStationId, string? orderBy, string? orderDirection, int pageIndex = 1, int pageSize = 50)
@@ -39,7 +41,18 @@ public static class Api
         {
             return Results.Problem(ex.Message);
         }
+    }
 
+    static async Task<IResult> DeleteJourney(IJourneyData data, int id)
+    {
+        try
+        {
+            await data.DeleteJourney(id);
+            return Results.Ok();
+        } catch (Exception ex)
+        {
+            return Results.Problem(ex.Message);
+        }
     }
 
     static async Task<IResult> GetStations(IStationData data)
@@ -110,6 +123,18 @@ public static class Api
             return Results.Ok();
         }
         catch (Exception ex)
+        {
+            return Results.Problem(ex.Message);
+        }
+    }
+
+    static async Task<IResult> DeleteStation(IStationData data, string stationId)
+    {
+        try
+        {
+            await data.DeleteStation(stationId);
+            return Results.Ok();
+        } catch (Exception ex)
         {
             return Results.Problem(ex.Message);
         }

@@ -4,6 +4,7 @@ namespace DataAccess.Data
 {
     public interface IStationData
     {
+        Task DeleteStation(string stationId);
         Task<IEnumerable<StationModel>> GetStations();
         Task<IEnumerable<StationStatisticModel>> GetStationStatistics(string stationId, int? month);
         Task<IEnumerable<StationTop5Model>> GetStationTop5Departures(string stationId);

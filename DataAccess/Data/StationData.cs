@@ -39,4 +39,5 @@ public class StationData : IStationData
     {
         await _DbAccess.SaveData("[dbo].[Sp_UpdateStation]", new { newStation.StationId, newStation.Name, newStation.Address, newStation.City, newStation.Operator, newStation.Capacity, newStation.Latitude, newStation.Altitude });
     }
+    public async Task DeleteStation(string stationId) => await _DbAccess.SaveData("[dbo].[Sp_DeleteStation]", new { stationId });
 }

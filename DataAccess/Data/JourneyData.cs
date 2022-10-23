@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DataAccess.DbAccess;
+﻿using DataAccess.DbAccess;
 using DataAccess.Models;
 
 namespace DataAccess.Data;
@@ -39,5 +34,7 @@ public class JourneyData : IJourneyData
         string date = newJourney.DepartureDate.ToString("yyyy-MM-dd");
         await _dbAccess.SaveData("[dbo].[Sp_InsertJourney]", new { date, newJourney.DepartureStationId, newJourney.ReturnStationId, newJourney.Distance, newJourney.Duration });
     }
+
+    public async Task DeleteJourney(int id) => await _dbAccess.SaveData("[dbo].[Sp_DeleteJourney]", new { id });
 
 }
